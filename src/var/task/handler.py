@@ -47,7 +47,7 @@ def handler(event, context):  # pylint: disable=unused-argument
     # Send email notification
     with open(excel_filename, "rb") as f:
         try:
-            response = notifications_client.send_email_notification( # pylint: disable=unused-variable
+            response = notifications_client.send_email_notification(  # pylint: disable=unused-variable  # noqa: F841
                 email_address=email_address,
                 template_id=TEMPLATE_ID,
                 personalisation={
@@ -111,5 +111,5 @@ def _build_query(current_date):
      `User`, `Employee Email Address`
     | sort `Last login date` desc
     """
-    
+
     return query
