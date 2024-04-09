@@ -21,8 +21,10 @@ def handler(event, context):  # pylint: disable=unused-argument
 
     email_address = _get_email_address(secrets_client)
 
+    current_date = dt.strftime(dt.now().date(), "%Y/%m/%d")
+
     # Query
-    query = _build_query()
+    query = _build_query(current_date)
 
     # Read logs
     dataframe = wr.cloudwatch.read_logs(
@@ -45,7 +47,7 @@ def handler(event, context):  # pylint: disable=unused-argument
     # Send email notification
     with open(excel_filename, "rb") as f:
         try:
-            response = notifications_client.send_email_notification(
+            response = notifications_client.send_email_notification( # pylint: disable=unused-variable
                 email_address=email_address,
                 template_id=TEMPLATE_ID,
                 personalisation={
@@ -71,8 +73,7 @@ def _get_date_range():
 
     start_datetime = dt(year, previous_month, 1, 0, 0, 0)
 
-    return {"start_datetime" : start_datetime,
-            "end_datetime" : end_datetime}
+    return {"start_datetime": start_datetime, "end_datetime": end_datetime}
 
 
 def _get_notifications_client(secrets_client):
@@ -81,8 +82,7 @@ def _get_notifications_client(secrets_client):
     secret_version = secret_id[1]
 
     response = secrets_client.get_secret_value(
-        SecretId=secret_arn, 
-        VersionStage=secret_version
+        SecretId=secret_arn, VersionStage=secret_version
     )
     api_key = response["SecretString"]
 
@@ -98,13 +98,11 @@ def _get_email_address(secrets_client):
     response = secrets_client.get_secret_value(
         SecretId=email_arn, VersionStage=email_version
     )
-    email_address = response["SecretString"]
 
-    return email_address
+    return response["SecretString"]
 
-def _build_query():
-    current_date = dt.strftime(dt.now().date(), "%Y/%m/%d")
 
+def _build_query(current_date):
     # Query
     query = f"""fields detail.data.user_id as `User`, detail.data.user_name as `Employee Email Address`
     | filter detail.data.type = "s"
@@ -113,4 +111,5 @@ def _build_query():
      `User`, `Employee Email Address`
     | sort `Last login date` desc
     """
+    
     return query
