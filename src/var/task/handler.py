@@ -9,12 +9,13 @@ from notifications_python_client import prepare_upload
 from notifications_python_client.notifications import NotificationsAPIClient
 
 
-def handler(event, context):
-    SECRET_ID = os.environ["SECRET_ID"]
-    LOG_GROUP_NAMES = os.environ["LOG_GROUP_NAMES"]
-    EMAIL_SECRET = os.environ["EMAIL_SECRET"]
-    TEMPLATE_ID = os.environ["TEMPLATE_ID"]
+SECRET_ID = os.environ["SECRET_ID"]
+LOG_GROUP_NAMES = os.environ["LOG_GROUP_NAMES"]
+EMAIL_SECRET = os.environ["EMAIL_SECRET"]
+TEMPLATE_ID = os.environ["TEMPLATE_ID"]
 
+
+def handler(event, context):  # pylint: disable=unused-argument
     secrets_client = boto3.client("secretsmanager")
 
     secret_id = SECRET_ID.split("|")
