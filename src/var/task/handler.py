@@ -15,10 +15,8 @@ TEMPLATE_ID = os.environ["TEMPLATE_ID"]
 
 
 def handler(event, context):  # pylint: disable=unused-argument
-    secrets_client = boto3.client("secretsmanager")
-
     notifications_client = NotificationsAPIClient(_get_secret_value(SECRET_ID))
-    
+
     email_address = _get_secret_value(EMAIL_SECRET)
 
     current_date = dt.strftime(dt.now().date(), "%Y/%m/%d")
