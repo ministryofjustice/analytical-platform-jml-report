@@ -17,9 +17,9 @@ TEMPLATE_ID = os.environ["TEMPLATE_ID"]
 def handler(event, context):  # pylint: disable=unused-argument
     secrets_client = boto3.client("secretsmanager")
 
-    notifications_client = _get_notifications_client(secrets_client)
-
-    email_address = _get_email_address(secrets_client)
+    notifications_client = NotificationsAPIClient(_get_secret_value(SECRET_ID))
+    
+    email_address = _get_secret_value(EMAIL_SECRET)
 
     current_date = dt.strftime(dt.now().date(), "%Y/%m/%d")
 
@@ -68,7 +68,6 @@ def _get_date_range():
     end_datetime = dt(year, current_month, 1, 0, 0, 0)
     if previous_month == 0:
         previous_month = 12
-        end_datetime = dt(year, current_month, 1, 0, 0, 0)
         year = year - 1
 
     start_datetime = dt(year, previous_month, 1, 0, 0, 0)
@@ -76,29 +75,13 @@ def _get_date_range():
     return {"start_datetime": start_datetime, "end_datetime": end_datetime}
 
 
-def _get_notifications_client(secrets_client):
-    secret_id = SECRET_ID.split("|")
-    secret_arn = secret_id[0]
-    secret_version = secret_id[1]
+def _get_secret_value(secret):
+    secrets_client = boto3.client("secretsmanager")
+    secret_arn, secret_version = secret.split("|")
 
     response = secrets_client.get_secret_value(
         SecretId=secret_arn, VersionStage=secret_version
     )
-    api_key = response["SecretString"]
-
-    notifications_client = NotificationsAPIClient(api_key)
-
-    return notifications_client
-
-
-def _get_email_address(secrets_client):
-    email_id = EMAIL_SECRET.split("|")
-    email_arn = email_id[0]
-    email_version = email_id[1]
-    response = secrets_client.get_secret_value(
-        SecretId=email_arn, VersionStage=email_version
-    )
-
     return response["SecretString"]
 
 
