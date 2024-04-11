@@ -8,6 +8,8 @@ LABEL org.opencontainers.image.vendor="Ministry of Justice" \
       org.opencontainers.image.description="JML report image for Analytical Platform" \
       org.opencontainers.image.url="https://github.com/ministryofjustice/analytical-platform-jml-report"
 
+SHELL ["/bin/bash", "-e", "-u", "-o", "pipefail", "-c"]
+
 COPY --chown=nobody:nobody --chmod=0755 src/var/task/ ${LAMBDA_TASK_ROOT}
 
 RUN <<EOF
