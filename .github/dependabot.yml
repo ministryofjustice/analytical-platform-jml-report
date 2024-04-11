@@ -6,6 +6,10 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: "daily"
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
@@ -14,7 +18,7 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-  - package-ecosystem: "devcontainers"
-    directory: "/"
-    schedule:
-      interval: "daily"
+    groups:
+      boto:
+        patterns:
+          - "boto*"
