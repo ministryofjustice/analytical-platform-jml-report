@@ -1,4 +1,4 @@
-awswrangler==3.8.0
+awswrangler==3.9.0
 boto3==1.34.141
 botocore==1.34.141
 notifications-python-client==9.1.0
