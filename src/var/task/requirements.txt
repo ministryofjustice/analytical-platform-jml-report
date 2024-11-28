@@ -1,6 +1,6 @@
 awswrangler==3.10.0
-boto3==1.35.69
-botocore==1.35.69
+boto3==1.35.71
+botocore==1.35.71
 notifications-python-client==10.0.0
 openpyxl==3.1.5
 pandas==2.2.3
