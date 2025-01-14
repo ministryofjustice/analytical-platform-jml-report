@@ -36,20 +36,20 @@ jobs:
         id: login_ecr
         uses: aws-actions/amazon-ecr-login@062b18b96a7aff071d4dc91bc00c4c1a7945b076
         with:
-          registries: 374269020027
+          registries: 509399598587
 
       - name: Build and Push
         id: build_and_push
         uses: docker/build-push-action@b32b51a8eda65d6793cd0494a773d4f6bcef32dc # v6.11.0
         with:
           push: true
-          tags: 374269020027.dkr.ecr.eu-west-2.amazonaws.com/data-platform-jml-extract-lambda-ecr-repo:${{ github.ref_name }}
+          tags: 509399598587.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-jml-report:${{ github.ref_name }}
 
       - name: Sign
         id: sign
         shell: bash
         run: |
-          cosign sign --yes 374269020027.dkr.ecr.eu-west-2.amazonaws.com/data-platform-jml-extract-lambda-ecr-repo@${{ steps.build_and_push.outputs.digest }}
+          cosign sign --yes 509399598587.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-jml-report@${{ steps.build_and_push.outputs.digest }}
 
       - name: Verify
         id: verify
@@ -57,4 +57,4 @@ jobs:
           cosign verify \
             --certificate-oidc-issuer=https://token.actions.githubusercontent.com \
             --certificate-identity=https://github.com/ministryofjustice/analytical-platform-jml-report/.github/workflows/release.yml@refs/tags/${{ github.ref_name }} \
-            374269020027.dkr.ecr.eu-west-2.amazonaws.com/data-platform-jml-extract-lambda-ecr-repo@${{ steps.build_and_push.outputs.digest }}
+            509399598587.dkr.ecr.eu-west-2.amazonaws.com/analytical-platform-jml-report@${{ steps.build_and_push.outputs.digest }}
